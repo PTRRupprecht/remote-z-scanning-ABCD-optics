@@ -1,0 +1,1990 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     69127,       1981]
+NotebookOptionsPosition[     68271,       1953]
+NotebookOutlinePosition[     68616,       1968]
+CellTagsIndexPosition[     68573,       1965]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "scripts", " ", "for", " ", "analytic", " ", "calculation", " ", "of", " ",
+     "beam", " ", "trajectories", " ", "using", " ", "linear", " ", "ABCD", 
+    " ", "optics"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"1.", " ", "focal", " ", "shift", " ", "d", 
+     RowBox[{"(", "D", ")"}], " ", "for", " ", "the", " ", "single"}], "-", 
+    RowBox[{"lens", " ", "configuration", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Fig", ".2", "B"}], ",", " ", 
+       RowBox[{"Supplemental", " ", "Information", " ", "III"}]}], ")"}], 
+     "\[IndentingNewLine]", "2.", " ", "focal", " ", "shift", " ", "d", 
+     RowBox[{"(", "D", ")"}], " ", "for", " ", "the", " ", "telescope", " ", 
+     "configuration", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Fig", ".2", "B"}], ",", " ", 
+       RowBox[{"Supplemental", " ", "Information", " ", "IV"}]}], ")"}], 
+     "\[IndentingNewLine]", "3.", " ", "focal", " ", "shift", " ", "d", 
+     RowBox[{"(", "D", ")"}], " ", "for", " ", "the", " ", "configuration", 
+     " ", "using", " ", "a", " ", "remote", " ", "tunable", " ", "lens", " ", 
+     RowBox[{"(", 
+      RowBox[{"Supplemental", " ", "Information", " ", "V"}], ")"}], 
+     "\[IndentingNewLine]", "4.", " ", "FOV", " ", "changes", " ", "for", " ",
+      "the", " ", "single"}], "-", 
+    RowBox[{
+    "lens", " ", "configuration", "\[IndentingNewLine]", "5.", " ", "FOV", 
+     " ", "changes", " ", "for", " ", "the", " ", "telescope", " ", 
+     "configuration", " ", 
+     RowBox[{"(", 
+      RowBox[{"Supplemental", " ", "Information", " ", "VI"}], ")"}], 
+     "\[IndentingNewLine]", "6.", " ", "FOV", " ", "changes", " ", "for", " ",
+      "the", " ", "tunable", " ", "lens", " ", "configuration", 
+     "\[IndentingNewLine]", "7.", " ", "Beam", " ", "size", " ", "at", " ", 
+     "different", " ", "apertures", " ", "for", " ", "the", " ", "telescope", 
+     " ", "configuration", " ", 
+     RowBox[{"(", 
+      RowBox[{"Fig", ".", "S3"}], ")"}], "\[IndentingNewLine]", "8.", " ", 
+     "Beam", " ", "size", " ", "at", " ", "the", " ", "back", " ", "focal", 
+     " ", "aperture", " ", "for", " ", "different", " ", "configurations", 
+     " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"BFA", " ", "filling"}], ",", " ", 
+       RowBox[{"Fig", ".2", "A"}], ",", " ", 
+       RowBox[{"Supplemental", " ", "Information", " ", "II"}], ",", " ", 
+       "IV", ",", " ", "V"}], ")"}]}]}], "\[IndentingNewLine]", " ", "*)"}], 
+  "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.6591633713740854`*^9, 3.6591634589982014`*^9}, {
+  3.6591636241305237`*^9, 3.6591637638901234`*^9}, {3.659164046356724*^9, 
+  3.6591640475579233`*^9}, {3.6591641637365236`*^9, 3.659164164703724*^9}, {
+  3.65917126146402*^9, 3.65917133421622*^9}, {3.6591716835040197`*^9, 
+  3.65917169126122*^9}, {3.659173230384284*^9, 3.659173252682684*^9}, {
+  3.659173493866284*^9, 3.659173502683284*^9}, {3.659173708051284*^9, 
+  3.659173822709084*^9}, {3.6591739791656837`*^9, 3.659173998311884*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+     "1.", " ", "focal", " ", "shift", " ", "for", " ", "the", " ", 
+      "single"}], "-", 
+     RowBox[{
+     "lens", " ", "configuration", " ", "using", " ", "the", " ", "focal", 
+      " ", "length", " ", "of", " ", "the", " ", "objective", " ", 
+      RowBox[{"(", "fo", ")"}]}]}], ",", " ", 
+    RowBox[{"the", " ", "tube", " ", "lens", " ", 
+     RowBox[{"(", "f1", ")"}]}], ",", " ", 
+    RowBox[{
+     RowBox[{"the", " ", "xy"}], "-", 
+     RowBox[{"scan", " ", "lens", " ", 
+      RowBox[{"(", "f2", ")"}], " ", "and", " ", "the", " ", "z"}], "-", 
+     RowBox[{"scan", " ", "lens", " ", 
+      RowBox[{"(", "fz", ")"}]}]}], ",", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+      "as", " ", "well", " ", "as", " ", "the", " ", "displacement", " ", 
+       "of", " ", "the", " ", "z"}], "-", 
+      RowBox[{"scan", " ", "mirror", " ", 
+       RowBox[{"(", "D", ")"}], " ", "and", " ", "the", " ", "focal", " ", 
+       "shift", " ", 
+       RowBox[{"(", "d", ")"}]}]}], ";", " ", 
+     RowBox[{"the", " ", "rayleigh", " ", "length", " ", "zR", " ", 
+      RowBox[{"(", 
+       RowBox[{
+       "which", " ", "is", " ", "much", " ", "larger", " ", "than", " ", 
+        "any", " ", "focal", " ", "length", " ", "used", " ", "here"}], ")"}],
+       " ", "and", " ", "the", " ", "axial", " ", "distance", " ", "z", " ", 
+      "from", " ", "the", " ", "beam", " ", "waist"}], ";", " ", 
+     RowBox[{"in", " ", "the", " ", "end"}]}], ",", " ", 
+    RowBox[{
+     RowBox[{"the", " ", "limit", " ", "case", " ", "zR"}], " ", "\[Rule]", 
+     " ", 
+     RowBox[{
+      RowBox[{"Infinity", " ", "and", " ", "z"}], " ", "\[Rule]", " ", 
+      "0"}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"ABCD", " ", "=", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fo", "+", "d"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fo"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f1", "+", "fo"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f2", "+", "f1"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f2", "+", "fz", "+", "x"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{
+           RowBox[{"2", "fz"}], "+", 
+           RowBox[{"2", "D"}]}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"q1", " ", "=", " ", 
+    RowBox[{"1", "/", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"z", "/", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"z", "^", "2"}], "+", 
+          RowBox[{"zR", "^", "2"}]}], ")"}]}], "-", " ", 
+       RowBox[{
+        RowBox[{"Sqrt", "[", 
+         RowBox[{"-", "1"}], "]"}], "*", 
+        RowBox[{"zR", "/", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"z", "^", "2"}], "+", 
+           RowBox[{"zR", "^", "2"}]}], ")"}]}]}]}], ")"}]}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"q2", " ", "=", " ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"ABCD", "[", 
+          RowBox[{"[", 
+           RowBox[{"1", ",", "1"}], "]"}], "]"}], "*", "q1"}], " ", "+", " ", 
+        RowBox[{"ABCD", "[", 
+         RowBox[{"[", 
+          RowBox[{"1", ",", "2"}], "]"}], "]"}]}], ")"}], "/", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"ABCD", "[", 
+          RowBox[{"[", 
+           RowBox[{"2", ",", "1"}], "]"}], "]"}], "*", "q1"}], " ", "+", " ", 
+        RowBox[{"ABCD", "[", 
+         RowBox[{"[", 
+          RowBox[{"2", ",", "2"}], "]"}], "]"}]}], ")"}]}], "]"}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"qx1", " ", "=", " ", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{"ComplexExpand", "[", 
+      RowBox[{"Re", "[", 
+       RowBox[{"1", "/", "q2"}], "]"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"dSolve", " ", "=", 
+    RowBox[{"NSolve", "[", 
+     RowBox[{"qx1", ",", "d"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"dSimplify", " ", "=", " ", 
+    RowBox[{
+     RowBox[{"Simplify", "[", 
+      RowBox[{"dSolve", "/.", 
+       RowBox[{"z", "\[Rule]", "0"}]}], "]"}], " ", "//", 
+     "Chop"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.659163498963435*^9, 3.6591636114075236`*^9}, {
+  3.6591640985047235`*^9, 3.6591641594893236`*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.659174101609684*^9, 3.6591741032320843`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{" ", 
+       RowBox[{
+        RowBox[{
+        "2.", " ", "focal", " ", "shift", " ", "for", " ", "the", " ", 
+         "telescope", " ", "configuration", " ", "using", " ", "the", " ", 
+         "focal", " ", "length", " ", "of", " ", "the", " ", "objective", " ", 
+         RowBox[{"(", "fo", ")"}]}], ",", " ", 
+        RowBox[{"the", " ", "tube", " ", "lens", " ", 
+         RowBox[{"(", "f1", ")"}]}], ",", " ", 
+        RowBox[{
+         RowBox[{"the", " ", "xy"}], "-", 
+         RowBox[{"scan", " ", "lens", " ", 
+          RowBox[{"(", "f2", ")"}]}]}], ",", " ", 
+        RowBox[{
+        "the", " ", "focal", " ", "length", " ", "of", " ", "the", " ", 
+         "relay", " ", "lens", " ", "2", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"f2", "'"}], " ", "=", " ", "fr2"}], ")"}]}], ",", " ", 
+        RowBox[{"the", " ", "relay", " ", "lens", " ", "1", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"f1", "'"}], " ", "=", " ", "fr1"}], ")"}]}]}], ")"}], " ",
+       "and", " ", "the", " ", "z"}], "-", 
+     RowBox[{"scan", " ", "lens", " ", 
+      RowBox[{"(", "fz", ")"}]}]}], ",", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+      "as", " ", "well", " ", "as", " ", "the", " ", "displacement", " ", 
+       "of", " ", "the", " ", "z"}], "-", 
+      RowBox[{"scan", " ", "mirror", " ", 
+       RowBox[{"(", "D", ")"}], " ", "and", " ", "the", " ", "focal", " ", 
+       "shift", " ", 
+       RowBox[{"(", "d", ")"}]}]}], ";", " ", 
+     RowBox[{"the", " ", "rayleigh", " ", "length", " ", "zR", " ", 
+      RowBox[{"(", 
+       RowBox[{
+       "which", " ", "is", " ", "much", " ", "larger", " ", "than", " ", 
+        "any", " ", "focal", " ", "length", " ", "used", " ", "here"}], ")"}],
+       " ", "and", " ", "the", " ", "axial", " ", "distance", " ", "z", " ", 
+      "from", " ", "the", " ", "beam", " ", "waist"}], ";", " ", 
+     RowBox[{"in", " ", "the", " ", "end"}]}], ",", " ", 
+    RowBox[{
+     RowBox[{"the", " ", "limit", " ", "case", " ", "zR"}], " ", "\[Rule]", 
+     " ", 
+     RowBox[{
+      RowBox[{"Infinity", " ", "and", " ", "z"}], " ", "\[Rule]", " ", 
+      "0"}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"ABCD", " ", "=", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fo", "+", "d"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fo"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f1", "+", "fo"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f2", "+", "f1"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f2", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{
+           RowBox[{"2", "*", "fz"}], "+", 
+           RowBox[{"2", "*", "D", " "}]}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"q1", " ", "=", " ", 
+    RowBox[{"1", "/", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"z", "/", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"z", "^", "2"}], "+", 
+          RowBox[{"zR", "^", "2"}]}], ")"}]}], "-", " ", 
+       RowBox[{
+        RowBox[{"Sqrt", "[", 
+         RowBox[{"-", "1"}], "]"}], "*", 
+        RowBox[{"zR", "/", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"z", "^", "2"}], "+", 
+           RowBox[{"zR", "^", "2"}]}], ")"}]}]}]}], ")"}]}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"q2", " ", "=", " ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"ABCD", "[", 
+          RowBox[{"[", 
+           RowBox[{"1", ",", "1"}], "]"}], "]"}], "*", "q1"}], " ", "+", " ", 
+        RowBox[{"ABCD", "[", 
+         RowBox[{"[", 
+          RowBox[{"1", ",", "2"}], "]"}], "]"}]}], ")"}], "/", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"ABCD", "[", 
+          RowBox[{"[", 
+           RowBox[{"2", ",", "1"}], "]"}], "]"}], "*", "q1"}], " ", "+", " ", 
+        RowBox[{"ABCD", "[", 
+         RowBox[{"[", 
+          RowBox[{"2", ",", "2"}], "]"}], "]"}]}], ")"}]}], "]"}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"qx1", " ", "=", " ", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{"ComplexExpand", "[", 
+      RowBox[{"Re", "[", 
+       RowBox[{"1", "/", "q2"}], "]"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"dSolve", " ", "=", 
+    RowBox[{"NSolve", "[", 
+     RowBox[{"qx1", ",", "d"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"dSimplify", " ", "=", " ", 
+    RowBox[{
+     RowBox[{"Simplify", "[", 
+      RowBox[{"dSolve", "/.", 
+       RowBox[{"z", "\[Rule]", "0"}]}], "]"}], " ", "//", 
+     "Chop"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.6591641702895236`*^9, 3.659164237920724*^9}, {
+  3.659164305267524*^9, 3.6591643331491237`*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.659174105525284*^9, 3.6591741068980837`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+    "3.", " ", "focal", " ", "shift", " ", "for", " ", "the", " ", "tunable", 
+     " ", "lens", " ", "configuration", " ", "using", " ", "the", " ", 
+     "focal", " ", "length", " ", "of", " ", "the", " ", "objective", " ", 
+     RowBox[{"(", "fo", ")"}]}], ",", " ", 
+    RowBox[{"the", " ", "tube", " ", "lens", " ", 
+     RowBox[{"(", "f1", ")"}]}], ",", " ", 
+    RowBox[{
+     RowBox[{"the", " ", "xy"}], "-", 
+     RowBox[{"scan", " ", "lens", " ", 
+      RowBox[{"(", "f2", ")"}], " ", "and", " ", "the", " ", "focal", " ", 
+      "lenght", " ", "of", " ", "the", " ", "tunable", " ", "z"}], "-", 
+     RowBox[{"scan", " ", "lens", " ", 
+      RowBox[{"(", "fz", ")"}]}]}], ",", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+      "as", " ", "well", " ", "as", " ", "the", " ", "displacement", " ", 
+       "of", " ", "the", " ", "z"}], "-", 
+      RowBox[{"scan", " ", "mirror", " ", 
+       RowBox[{"(", "D", ")"}], " ", "and", " ", "the", " ", "change", " ", 
+       "of", " ", "the", " ", "focal", " ", "length", " ", "of", " ", "the", 
+       " ", "tunable", " ", "lens", " ", 
+       RowBox[{"(", "q", ")"}]}]}], ";", " ", 
+     RowBox[{"the", " ", "rayleigh", " ", "length", " ", "zR", " ", 
+      RowBox[{"(", 
+       RowBox[{
+       "which", " ", "is", " ", "much", " ", "larger", " ", "than", " ", 
+        "any", " ", "focal", " ", "length", " ", "used", " ", "here"}], ")"}],
+       " ", "and", " ", "the", " ", "axial", " ", "distance", " ", "z", " ", 
+      "from", " ", "the", " ", "beam", " ", "waist"}], ";", " ", 
+     RowBox[{"in", " ", "the", " ", "end"}]}], ",", " ", 
+    RowBox[{
+     RowBox[{"the", " ", "limit", " ", "case", " ", "zR"}], " ", "\[Rule]", 
+     " ", 
+     RowBox[{
+      RowBox[{"Infinity", " ", "and", " ", "z"}], " ", "\[Rule]", " ", 
+      "0"}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"ABCD", " ", "=", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fo", "+", "d"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fo"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f1", "+", "fo"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f2", "+", "f1"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f2", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"fz", "+", "q"}], ")"}]}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"2", "*", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"fz", "+", "q"}], ")"}]}], "1"}
+        }], "\[NoBreak]", ")"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"q1", " ", "=", " ", 
+    RowBox[{"1", "/", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"z", "/", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"z", "^", "2"}], "+", 
+          RowBox[{"zR", "^", "2"}]}], ")"}]}], "-", " ", 
+       RowBox[{
+        RowBox[{"Sqrt", "[", 
+         RowBox[{"-", "1"}], "]"}], "*", 
+        RowBox[{"zR", "/", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"z", "^", "2"}], "+", 
+           RowBox[{"zR", "^", "2"}]}], ")"}]}]}]}], ")"}]}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"q2", " ", "=", " ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"ABCD", "[", 
+          RowBox[{"[", 
+           RowBox[{"1", ",", "1"}], "]"}], "]"}], "*", "q1"}], " ", "+", " ", 
+        RowBox[{"ABCD", "[", 
+         RowBox[{"[", 
+          RowBox[{"1", ",", "2"}], "]"}], "]"}]}], ")"}], "/", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"ABCD", "[", 
+          RowBox[{"[", 
+           RowBox[{"2", ",", "1"}], "]"}], "]"}], "*", "q1"}], " ", "+", " ", 
+        RowBox[{"ABCD", "[", 
+         RowBox[{"[", 
+          RowBox[{"2", ",", "2"}], "]"}], "]"}]}], ")"}]}], "]"}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"qx1", " ", "=", " ", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{"ComplexExpand", "[", 
+      RowBox[{"Re", "[", 
+       RowBox[{"1", "/", "q2"}], "]"}], "]"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"dSolve", " ", "=", 
+    RowBox[{"NSolve", "[", 
+     RowBox[{"qx1", ",", "d"}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"dSimplify", " ", "=", " ", 
+    RowBox[{
+     RowBox[{"Simplify", "[", 
+      RowBox[{"dSolve", "/.", 
+       RowBox[{"z", "\[Rule]", "0"}]}], "]"}], " ", "//", 
+     "Chop"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.6591643598733234`*^9, 3.6591644592693233`*^9}, 
+   3.6640150102828317`*^9}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.659174109019684*^9, 3.659174109425284*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{" ", 
+       RowBox[{
+        RowBox[{
+        "4.", " ", "FOV", " ", "changes", " ", "for", " ", "the", " ", 
+         "telescope", " ", "configuration", " ", "using", " ", "the", " ", 
+         "focal", " ", "length", " ", "of", " ", "the", " ", "objective", " ", 
+         RowBox[{"(", "fo", ")"}]}], ",", " ", 
+        RowBox[{"the", " ", "tube", " ", "lens", " ", 
+         RowBox[{"(", "f1", ")"}]}], ",", " ", 
+        RowBox[{
+         RowBox[{"the", " ", "xy"}], "-", 
+         RowBox[{"scan", " ", "lens", " ", 
+          RowBox[{"(", "f2", ")"}]}]}], ",", " ", 
+        RowBox[{
+        "the", " ", "focal", " ", "length", " ", "of", " ", "the", " ", 
+         "relay", " ", "lens", " ", "2", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"f2", "'"}], " ", "=", " ", "fr2"}], ")"}]}], ",", " ", 
+        RowBox[{"the", " ", "relay", " ", "lens", " ", "1", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"f1", "'"}], " ", "=", " ", "fr1"}], ")"}]}]}], ")"}], " ",
+       " ", "and", " ", "the", " ", "z"}], "-", 
+     RowBox[{"scan", " ", "lens", " ", 
+      RowBox[{"(", "fz", ")"}]}]}], ",", " ", 
+    RowBox[{
+     RowBox[{
+     "as", " ", "well", " ", "as", " ", "the", " ", "displacement", " ", "of",
+       " ", "the", " ", "z"}], "-", 
+     RowBox[{"scan", " ", "mirror", " ", 
+      RowBox[{"(", "D", ")"}], " ", "and", " ", "the", " ", "focal", " ", 
+      "shift", " ", 
+      RowBox[{"(", "d", ")"}]}]}], ",", " ", 
+    RowBox[{
+    "as", " ", "well", " ", "as", " ", "the", " ", "axial", " ", "deviation", 
+     " ", "of", " ", "the", " ", "scan", " ", "mirrors", " ", "from", " ", 
+     "the", " ", "optimal", " ", "position"}], ",", " ", "w", ",", " ", 
+    RowBox[{
+    "the", " ", "beam", " ", "diameter", " ", "when", " ", "entering", " ", 
+     "the", " ", "lens", " ", "system"}], ",", " ", "R", ",", " ", 
+    RowBox[{
+     RowBox[{
+     "and", " ", "the", " ", "deflection", " ", "angle", " ", "of", " ", 
+      "the", " ", "beam", " ", "at", " ", "the", " ", 
+      RowBox[{"x", "/", "y"}]}], "-", "mirrors"}], ",", " ", 
+    RowBox[{
+     RowBox[{"b", " ", 
+      RowBox[{"(", 
+       RowBox[{"b", " ", "=", " ", 
+        RowBox[{"beta", " ", "in", " ", "the", " ", "manuscript"}]}], ")"}]}],
+      ";", " ", 
+     RowBox[{
+     "the", " ", "matrix", " ", "simulation", " ", "of", " ", "the", " ", 
+      "deflection", " ", "writes", " ", "as", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"1", " ", "0"}], ";", " ", 
+        RowBox[{
+         RowBox[{"b", "'"}], " ", "1"}]}], ")"}]}]}], ",", " ", 
+    RowBox[{"with", " ", 
+     RowBox[{"b", "'"}], " ", "being", " ", "the", " ", "normalized", " ", 
+     "version", " ", "of", " ", "b"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"ABCDtemp", " ", "=", "  ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fz", "+", "x", "-", "w"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{
+           RowBox[{"2", "fz"}], "+", 
+           RowBox[{"2", "D"}]}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"Simplify", "[", 
+    RowBox[{
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", 
+         RowBox[{"fo", "+", 
+          FractionBox[
+           RowBox[{"2", "D", " ", 
+            SuperscriptBox["fo", "2"], " ", 
+            SuperscriptBox["f2", "2"], " "}], 
+           RowBox[{
+            SuperscriptBox["f1", "2"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"-", 
+               SuperscriptBox["fz", "2"]}], "+", 
+              RowBox[{"2", " ", "D", " ", "x"}]}], ")"}]}]]}]},
+        {"0", "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "0"},
+        {
+         RowBox[{
+          RowBox[{"-", "1"}], "/", "fo"}], "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", 
+         RowBox[{"f1", "+", "fo"}]},
+        {"0", "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "0"},
+        {
+         RowBox[{
+          RowBox[{"-", "1"}], "/", "f1"}], "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", 
+         RowBox[{"f2", "+", "f1"}]},
+        {"0", "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "0"},
+        {
+         RowBox[{
+          RowBox[{"-", "1"}], "/", "f2"}], "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", 
+         RowBox[{"f2", "+", "w"}]},
+        {"0", "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "0"},
+        {
+         RowBox[{"b", "/", 
+          RowBox[{"ABCDtemp", "[", 
+           RowBox[{"[", 
+            RowBox[{"1", ",", "1"}], "]"}], "]"}]}], "1"}
+       }], "\[NoBreak]", ")"}], ".", "ABCDtemp", ".", 
+     RowBox[{"{", 
+      RowBox[{"R", ",", "0"}], "}"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.6591713477736197`*^9, 3.65917167268522*^9}, {
+  3.6591718792860203`*^9, 3.65917194440382*^9}, {3.6591722744534197`*^9, 
+  3.65917227464062*^9}, {3.659173297461084*^9, 3.659173310598284*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.659174112172884*^9, 3.659174112812484*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{" ", 
+       RowBox[{
+        RowBox[{
+        "5.", " ", "FOV", " ", "changes", " ", "for", " ", "the", " ", 
+         "telescope", " ", "configuration", " ", "using", " ", "the", " ", 
+         "focal", " ", "length", " ", "of", " ", "the", " ", "objective", " ", 
+         RowBox[{"(", "fo", ")"}]}], ",", " ", 
+        RowBox[{"the", " ", "tube", " ", "lens", " ", 
+         RowBox[{"(", "f1", ")"}]}], ",", " ", 
+        RowBox[{
+         RowBox[{"the", " ", "xy"}], "-", 
+         RowBox[{"scan", " ", "lens", " ", 
+          RowBox[{"(", "f2", ")"}]}]}], ",", " ", 
+        RowBox[{
+        "the", " ", "focal", " ", "length", " ", "of", " ", "the", " ", 
+         "relay", " ", "lens", " ", "2", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"f2", "'"}], " ", "=", " ", "fr2"}], ")"}]}], ",", " ", 
+        RowBox[{"the", " ", "relay", " ", "lens", " ", "1", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"f1", "'"}], " ", "=", " ", "fr1"}], ")"}]}]}], ")"}], " ",
+       " ", "and", " ", "the", " ", "z"}], "-", 
+     RowBox[{"scan", " ", "lens", " ", 
+      RowBox[{"(", "fz", ")"}]}]}], ",", " ", 
+    RowBox[{
+     RowBox[{
+     "as", " ", "well", " ", "as", " ", "the", " ", "displacement", " ", "of",
+       " ", "the", " ", "z"}], "-", 
+     RowBox[{"scan", " ", "mirror", " ", 
+      RowBox[{"(", "D", ")"}], " ", "and", " ", "the", " ", "focal", " ", 
+      "shift", " ", 
+      RowBox[{"(", "d", ")"}]}]}], ",", " ", 
+    RowBox[{
+    "as", " ", "well", " ", "as", " ", "the", " ", "axial", " ", "deviation", 
+     " ", "of", " ", "the", " ", "scan", " ", "mirrors", " ", "from", " ", 
+     "the", " ", "optimal", " ", "position"}], ",", " ", "w", ",", " ", 
+    RowBox[{
+    "the", " ", "beam", " ", "diameter", " ", "when", " ", "entering", " ", 
+     "the", " ", "lens", " ", "system"}], ",", " ", "R", ",", " ", 
+    RowBox[{
+     RowBox[{
+     "and", " ", "the", " ", "deflection", " ", "angle", " ", "of", " ", 
+      "the", " ", "beam", " ", "at", " ", "the", " ", 
+      RowBox[{"x", "/", "y"}]}], "-", "mirrors"}], ",", " ", 
+    RowBox[{
+     RowBox[{"b", " ", 
+      RowBox[{"(", 
+       RowBox[{"b", " ", "=", " ", 
+        RowBox[{"beta", " ", "in", " ", "the", " ", "manuscript"}]}], ")"}]}],
+      ";", " ", 
+     RowBox[{
+     "the", " ", "matrix", " ", "simulation", " ", "of", " ", "the", " ", 
+      "deflection", " ", "writes", " ", "as", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"1", " ", "0"}], ";", " ", 
+        RowBox[{
+         RowBox[{"b", "'"}], " ", "1"}]}], ")"}]}]}], ",", " ", 
+    RowBox[{"with", " ", 
+     RowBox[{"b", "'"}], " ", "being", " ", "the", " ", "normalized", " ", 
+     "version", " ", "of", " ", "b", "\[IndentingNewLine]", "Interestingly"}],
+     ",", " ", 
+    RowBox[{"as", " ", "a", " ", "result"}], ",", " ", 
+    RowBox[{
+     RowBox[{
+     "the", " ", "FOV", " ", "change", " ", "for", " ", "the", " ", "tunable",
+       " ", "lens", " ", "is", " ", "also", " ", "linearly", " ", "related", 
+      " ", "to", " ", "the", " ", "focal", " ", "shift"}], ";", " ", 
+     "however"}], ",", " ", 
+    RowBox[{
+     RowBox[{"the", " ", "focal", " ", "shift", " ", "is", " ", "non"}], "-", 
+     RowBox[{
+     "linear", " ", "with", " ", "the", " ", "change", " ", "of", " ", "the", 
+      " ", "focal", " ", "length", " ", "of", " ", "the", " ", "tunable", " ",
+       "lens"}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"ABCDtemp", " ", "=", " ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr2", "+", "f2", "-", "w"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{
+           RowBox[{"2", "*", "fz"}], "+", 
+           RowBox[{"2", "*", "D", " "}]}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"Simplify", "[", 
+    RowBox[{
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", 
+         RowBox[{"fo", "-", 
+          RowBox[{"2", 
+           FractionBox[
+            RowBox[{
+             SuperscriptBox["fo", "2"], " ", 
+             SuperscriptBox["f2", "2"], " ", "D", " ", 
+             SuperscriptBox["fr1", "2"]}], 
+            RowBox[{
+             SuperscriptBox["fr2", "2"], " ", 
+             SuperscriptBox["fz", "2"], 
+             SuperscriptBox["f1", "2"]}]]}]}]},
+        {"0", "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "0"},
+        {
+         RowBox[{
+          RowBox[{"-", "1"}], "/", "fo"}], "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", 
+         RowBox[{"f1", "+", "fo"}]},
+        {"0", "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "0"},
+        {
+         RowBox[{
+          RowBox[{"-", "1"}], "/", "f1"}], "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", 
+         RowBox[{"f2", "+", "f1"}]},
+        {"0", "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "0"},
+        {
+         RowBox[{
+          RowBox[{"-", "1"}], "/", "f2"}], "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", 
+         RowBox[{"f2", "+", "w"}]},
+        {"0", "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "0"},
+        {
+         RowBox[{"b", "/", 
+          RowBox[{"ABCDtemp", "[", 
+           RowBox[{"[", 
+            RowBox[{"1", ",", "1"}], "]"}], "]"}]}], "1"}
+       }], "\[NoBreak]", ")"}], ".", "ABCDtemp", ".", 
+     RowBox[{"{", 
+      RowBox[{"R", ",", "0"}], "}"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{
+  3.65917167930762*^9, {3.65917196048942*^9, 3.65917198551782*^9}, {
+   3.65917212002782*^9, 3.65917213435362*^9}, {3.65917227204902*^9, 
+   3.65917227223622*^9}, 3.659173315169084*^9, {3.659173648275284*^9, 
+   3.6591736971740837`*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.659174114824884*^9, 3.659174115246084*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+    "6.", " ", "FOV", " ", "changes", " ", "for", " ", "the", " ", "tunable", 
+     " ", "lens", " ", "configuration", " ", "using", " ", "the", " ", 
+     "focal", " ", "length", " ", "of", " ", "the", " ", "objective", " ", 
+     RowBox[{"(", "fo", ")"}]}], ",", " ", 
+    RowBox[{"the", " ", "tube", " ", "lens", " ", 
+     RowBox[{"(", "f1", ")"}]}], ",", " ", 
+    RowBox[{
+     RowBox[{"the", " ", "xy"}], "-", 
+     RowBox[{"scan", " ", "lens", " ", 
+      RowBox[{"(", "f2", ")"}]}]}], ",", " ", 
+    RowBox[{
+     RowBox[{"the", " ", "focal", " ", "length", " ", "the", " ", "z"}], "-", 
+     RowBox[{"scan", " ", "lens", " ", 
+      RowBox[{"(", "fz", ")"}]}]}], ",", " ", 
+    RowBox[{
+     RowBox[{
+     "as", " ", "well", " ", "as", " ", "the", " ", "displacement", " ", "of",
+       " ", "the", " ", "z"}], "-", 
+     RowBox[{"scan", " ", "mirror", " ", 
+      RowBox[{"(", "D", ")"}], " ", "and", " ", "the", " ", "focal", " ", 
+      "shift", " ", 
+      RowBox[{"(", "d", ")"}], " ", "and", " ", "the", " ", "change", " ", 
+      "of", " ", "the", " ", "focal", " ", "length", " ", "of", " ", "the", 
+      " ", "tunable", " ", "lens", " ", 
+      RowBox[{"(", "q", ")"}]}]}], ",", " ", 
+    RowBox[{
+    "as", " ", "well", " ", "as", " ", "the", " ", "axial", " ", "deviation", 
+     " ", "of", " ", "the", " ", "scan", " ", "mirrors", " ", "from", " ", 
+     "the", " ", "optimal", " ", "position"}], ",", " ", "w", ",", " ", 
+    RowBox[{
+    "the", " ", "beam", " ", "diameter", " ", "when", " ", "entering", " ", 
+     "the", " ", "lens", " ", "system"}], ",", " ", "R", ",", " ", 
+    RowBox[{
+     RowBox[{
+     "and", " ", "the", " ", "deflection", " ", "angle", " ", "of", " ", 
+      "the", " ", "beam", " ", "at", " ", "the", " ", 
+      RowBox[{"x", "/", "y"}]}], "-", "mirrors"}], ",", " ", 
+    RowBox[{
+     RowBox[{"b", " ", 
+      RowBox[{"(", 
+       RowBox[{"b", " ", "=", " ", 
+        RowBox[{"beta", " ", "in", " ", "the", " ", "manuscript"}]}], ")"}]}],
+      ";", " ", 
+     RowBox[{
+     "the", " ", "matrix", " ", "simulation", " ", "of", " ", "the", " ", 
+      "deflection", " ", "writes", " ", "as", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"1", " ", "0"}], ";", " ", 
+        RowBox[{
+         RowBox[{"b", "'"}], " ", "1"}]}], ")"}]}]}], ",", " ", 
+    RowBox[{"with", " ", 
+     RowBox[{"b", "'"}], " ", "being", " ", "the", " ", "normalized", " ", 
+     "version", " ", "of", " ", "b"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"ABCDtemp", " ", "=", " ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fz", "+", "x", "-", "w"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"fz", "+", "q"}], ")"}]}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"2", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"fz", "+", "q"}], ")"}]}], "1"}
+        }], "\[NoBreak]", ")"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"Simplify", "[", 
+    RowBox[{
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", 
+         RowBox[{"fo", "-", 
+          FractionBox[
+           RowBox[{
+            SuperscriptBox["fo", "2"], " ", 
+            SuperscriptBox["f2", "2"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"-", "2"}], " ", 
+               SuperscriptBox["f2", "2"], " ", "q"}], "-", 
+              RowBox[{"4", " ", "f2", " ", 
+               SuperscriptBox["q", "2"]}], "+", 
+              RowBox[{"2", " ", 
+               SuperscriptBox["q", "3"]}]}], ")"}]}], 
+           RowBox[{
+            SuperscriptBox["f1", "2"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              SuperscriptBox["f2", "4"], "+", 
+              RowBox[{"4", 
+               SuperscriptBox["f2", "3"], " ", "q"}], "+", 
+              RowBox[{"2", 
+               SuperscriptBox["f2", "2"], " ", 
+               SuperscriptBox["q", "2"]}], "-", 
+              RowBox[{"4", "f2", " ", 
+               SuperscriptBox["q", "3"]}], "+", 
+              SuperscriptBox["q", "4"]}], ")"}]}]]}]},
+        {"0", "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "0"},
+        {
+         RowBox[{
+          RowBox[{"-", "1"}], "/", "fo"}], "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", 
+         RowBox[{"f1", "+", "fo"}]},
+        {"0", "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "0"},
+        {
+         RowBox[{
+          RowBox[{"-", "1"}], "/", "f1"}], "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", 
+         RowBox[{"f2", "+", "f1"}]},
+        {"0", "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "0"},
+        {
+         RowBox[{
+          RowBox[{"-", "1"}], "/", "f2"}], "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", 
+         RowBox[{"f2", "+", "w"}]},
+        {"0", "1"}
+       }], "\[NoBreak]", ")"}], ".", 
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "0"},
+        {
+         RowBox[{"b", "/", 
+          RowBox[{"ABCDtemp", "[", 
+           RowBox[{"[", 
+            RowBox[{"1", ",", "1"}], "]"}], "]"}]}], "1"}
+       }], "\[NoBreak]", ")"}], ".", "ABCDtemp", ".", 
+     RowBox[{"{", 
+      RowBox[{"R", ",", "0"}], "}"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{
+  3.65917167930762*^9, {3.65917196048942*^9, 3.65917198551782*^9}, {
+   3.65917212002782*^9, 3.65917213435362*^9}, {3.6591722204468203`*^9, 
+   3.65917239409062*^9}, 3.659173321195684*^9}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.659174117523684*^9, 3.659174117882484*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+    "7.", " ", "Beam", " ", "sizes", " ", "at", " ", "different", " ", 
+     "apertures", " ", "for", " ", "the", " ", "telescope", " ", 
+     "configuration"}], ",", " ", 
+    RowBox[{
+    "using", " ", "the", " ", "same", " ", "naming", " ", "convention", " ", 
+     "as", " ", "described", " ", "above", "\[IndentingNewLine]", "From", " ",
+      "the", " ", "respective", " ", "result"}], ",", " ", 
+    RowBox[{
+     RowBox[{
+     "the", " ", "first", " ", "element", " ", "indicates", " ", "the", " ", 
+      "aperture", " ", "the", " ", "beam", " ", "size", " ", "at", " ", "the",
+       " ", "respective", " ", "axial", " ", "position", " ", "in", " ", 
+      "the", " ", "beam", " ", "path"}], ";", " ", 
+     RowBox[{"between", " ", "each", " ", "two", " ", "positions"}]}], ",", 
+    " ", 
+    RowBox[{
+     RowBox[{
+     "the", " ", "beam", " ", "size", " ", "changes", " ", "linearly", " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"following", " ", "linear", " ", "ray", " ", "optics"}], ",",
+          " ", 
+         RowBox[{
+         "which", " ", "deviate", " ", "only", " ", "slightly", " ", "from", 
+          " ", "Gaussian", " ", "optics", " ", "around", " ", "the", " ", 
+          "beam", " ", "waists"}]}], ")"}], ".", " ", "This"}], " ", 
+      "calculation", " ", "does", " ", "not", " ", "take", " ", "into", " ", 
+      "account", " ", "beam", " ", "clipping", " ", "due", " ", "to", " ", 
+      "limited", " ", 
+      RowBox[{"apertures", ".", " ", "The"}], " ", "results", " ", "have", 
+      " ", "been", " ", "used", " ", "to", " ", "plot", " ", "the", " ", 
+      "rays", " ", "in", " ", 
+      RowBox[{"Fig", ".", "S3"}], " ", "in", " ", "the", " ", "Supplementary",
+       " ", 
+      RowBox[{"Information", ".", "\[IndentingNewLine]", "A"}]}], " ", ">>", 
+     " ", 
+     RowBox[{
+      RowBox[{
+      "at", " ", "the", " ", "position", " ", "of", " ", "the", " ", "z"}], 
+      "-", 
+      RowBox[{"scan", " ", "lens", " ", 
+       RowBox[{"(", "1", ")"}], "\[IndentingNewLine]", "B"}]}], " ", ">>", 
+     " ", 
+     RowBox[{
+      RowBox[{
+      "at", " ", "the", " ", "position", " ", "of", " ", "the", " ", "z"}], 
+      "-", 
+      RowBox[{"scan", " ", "lens", " ", 
+       RowBox[{"(", "2", ")"}], "\[IndentingNewLine]", "C"}]}], " ", ">>", 
+     " ", 
+     RowBox[{
+     "at", " ", "the", " ", "position", " ", "of", " ", "relay", " ", "lens", 
+      " ", "1", "\[IndentingNewLine]", "D"}], " ", ">>", " ", 
+     RowBox[{
+     "at", " ", "the", " ", "position", " ", "of", " ", "relay", " ", "lens", 
+      " ", "2", "\[IndentingNewLine]", "E"}], " ", ">>", " ", 
+     RowBox[{
+      RowBox[{"at", " ", "the", " ", "position", " ", "of", " ", "xy"}], "-", 
+      RowBox[{"scan", " ", "lens", "\[IndentingNewLine]", "F"}]}], " ", ">>", 
+     " ", 
+     RowBox[{
+     "at", " ", "the", " ", "position", " ", "of", " ", "the", " ", "tube", 
+      " ", "lens", "\[IndentingNewLine]", "G"}], " ", ">>", " ", 
+     RowBox[{
+     "at", " ", "the", " ", "position", " ", "of", " ", "the", " ", "back", 
+      " ", "focal", " ", "aperture", " ", "of", " ", "the", " ", 
+      "objective"}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"A", "=", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"R", ",", " ", "0"}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"B", "=", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{
+           RowBox[{"2", "*", "fz"}], " ", "+", 
+           RowBox[{"2", "*", "D"}]}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"R", ",", " ", "0"}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"C", "=", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{
+           RowBox[{"2", "*", "fz"}], " ", "+", 
+           RowBox[{"2", "*", "D"}]}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"R", ",", " ", "0"}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"D", "=", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{
+           RowBox[{"2", "*", "fz"}], " ", "+", 
+           RowBox[{"2", "*", "D"}]}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"R", ",", " ", "0"}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"E", "=", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr2", "+", "f2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{
+           RowBox[{"2", "*", "fz"}], " ", "+", 
+           RowBox[{"2", "*", "D"}]}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"R", ",", " ", "0"}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"F", "=", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f2", "+", "f1"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr2", "+", "f2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{
+           RowBox[{"2", "*", "fz"}], " ", "+", 
+           RowBox[{"2", "*", "D"}]}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"R", ",", " ", "0"}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"G", "=", " ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f1", "+", "fo"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f2", "+", "f1"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr2", "+", "f2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{
+           RowBox[{"2", "*", "fz"}], " ", "+", 
+           RowBox[{"2", "*", "D"}]}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"R", ",", " ", "0"}], "}"}]}], "]"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.6591724897038617`*^9, 3.659172562876733*^9}, {
+  3.6591726740866485`*^9, 3.6591727620746145`*^9}, {3.6591728010294657`*^9, 
+  3.6591728230502076`*^9}, {3.6591728751871433`*^9, 3.659173083770084*^9}, {
+  3.6591731613854837`*^9, 3.6591732150122843`*^9}, {3.6591732577098837`*^9, 
+  3.659173287786084*^9}, {3.659173338361684*^9, 3.659173384155684*^9}, {
+  3.659173425867484*^9, 3.6591734826810837`*^9}, {3.659173531348484*^9, 
+  3.659173631513884*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.659174120815284*^9, 3.659174121158484*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+    "8.", " ", "Beam", " ", "sizes", " ", "at", " ", "the", " ", "back", " ", 
+     "focal", " ", "aperture", " ", "for", " ", "different", " ", 
+     "configurations"}], ",", " ", 
+    RowBox[{
+    "using", " ", "the", " ", "same", " ", "naming", " ", "convention", " ", 
+     "as", " ", "described", " ", "above", "\[IndentingNewLine]", "From", " ",
+      "the", " ", "respective", " ", "result"}], ",", " ", 
+    RowBox[{
+    "the", " ", "first", " ", "element", " ", "indicates", " ", "the", " ", 
+     "aperture", " ", "the", " ", "beam", " ", "size", " ", "at", " ", "the", 
+     " ", "respective", " ", "axial", " ", "position", " ", "in", " ", "the", 
+     " ", "beam", " ", "path"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"single", "-", 
+    RowBox[{"lens", " ", "configuration"}]}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"sizeBFP", "=", " ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f1", "+", "fo"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f2", "+", "f1"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fz", "+", "f2", "+", "x"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{
+           RowBox[{"2", "*", "fz"}], " ", "+", 
+           RowBox[{"2", "*", "D"}]}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"R", ",", " ", "0"}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"telescope", " ", "configuration"}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"sizeBFP", "=", " ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f1", "+", "fo"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f2", "+", "f1"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr2", "+", "f2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{
+           RowBox[{"2", "*", "fz"}], " ", "+", 
+           RowBox[{"2", "*", "D"}]}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fz"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"fr1", "+", "fr2"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "fr2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"R", ",", " ", "0"}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"telescope", " ", "configuration"}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"sizeBFP", "=", " ", 
+    RowBox[{"Simplify", "[", 
+     RowBox[{
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f1", "+", "fo"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f1"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f2", "+", "f1"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", "f2"}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"f2", "+", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"fz", "+", "q"}], ")"}]}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", 
+          RowBox[{"2", "*", "fz"}]},
+         {"0", "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+         {"1", "0"},
+         {
+          RowBox[{
+           RowBox[{"-", "1"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"fz", "+", "q"}], ")"}]}], "1"}
+        }], "\[NoBreak]", ")"}], ".", 
+      RowBox[{"{", 
+       RowBox[{"R", ",", " ", "0"}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.659173842403284*^9, 3.659173971801484*^9}, {
+  3.659174051255684*^9, 3.659174072399684*^9}}]
+},
+WindowSize->{1904, 1022},
+WindowMargins->{{1600, Automatic}, {Automatic, 0}},
+FrontEndVersion->"10.2 for Microsoft Windows (64-bit) (July 29, 2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 3108, 59, 232, "Input"],
+Cell[3669, 81, 5570, 159, 205, "Input"],
+Cell[9242, 242, 94, 1, 31, "Input"],
+Cell[9339, 245, 7445, 215, 237, "Input"],
+Cell[16787, 462, 94, 1, 31, "Input"],
+Cell[16884, 465, 5746, 160, 205, "Input"],
+Cell[22633, 627, 92, 1, 31, "Input"],
+Cell[22728, 630, 5859, 160, 179, "Input"],
+Cell[28590, 792, 92, 1, 31, "Input"],
+Cell[28685, 795, 7927, 219, 193, "Input"],
+Cell[36615, 1016, 92, 1, 31, "Input"],
+Cell[36710, 1019, 6226, 168, 183, "Input"],
+Cell[42939, 1189, 92, 1, 31, "Input"],
+Cell[43034, 1192, 17584, 525, 475, "Input"],
+Cell[60621, 1719, 92, 1, 31, "Input"],
+Cell[60716, 1722, 7551, 229, 283, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

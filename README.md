@@ -1,4 +1,4 @@
-# remote-z-scanning-ABCD-optics
+# Remote z-scanning ABCD optics
 
 This is a selection of code snippets in a Mathematica notebook for evaluating the linear optics propagation in a remote z-scanning scheme as described in the accompanying publication (link/DOI to be added here).
 

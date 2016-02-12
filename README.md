@@ -2,7 +2,7 @@
 
 This is a selection of code snippets in a Mathematica notebook for evaluating the linear optics propagation in a remote z-scanning scheme as described in the accompanying publication (link/DOI to be added here).
 
-A derivation of the underlying formulae and more context can be found in the pdf.
+A derivation of the underlying formulae and more context can be found in the pdf to be found in this repository.
 
 The software Mathematica can be used free of charge for a trial period of 15 days and is optimally designed for symbolic calculations.
 

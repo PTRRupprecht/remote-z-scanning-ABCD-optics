@@ -1,6 +1,6 @@
 # ABCD optics for beam propagation for remote z-scanning using Mathematica
 
-This is a selection of code snippets in a Mathematica notebook for evaluating the linear optics propagation in a remote z-scanning scheme as described in the accompanying publication (link/DOI to be added here).
+This is a selection of code snippets in a Mathematica notebook for evaluating the linear optics propagation in a remote z-scanning scheme as described in the accompanying publication (http://dx.doi.org/10.1364/BOE.7.001656).
 
 A derivation of the underlying formulae and more context can be found in the pdf in this repository.
 
